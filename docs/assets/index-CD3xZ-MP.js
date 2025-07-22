@@ -1,0 +1,1 @@
+import{d as t,c as n,a as o,b as r,u as s,r as a,o as u}from"./index-BP5SIEio.js";const m=t({__name:"index",setup(p){return(d,e)=>(u(),n("div",null,[e[1]||(e[1]=o(" 主页 ")),r("h2",{onClick:e[0]||(e[0]=l=>s(a).push("/test"))},"测试")]))}});export{m as default};
