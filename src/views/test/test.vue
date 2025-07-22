@@ -1,7 +1,7 @@
 <template>
   <div>
     测试
-    <h3 @click="router.push('/')">
+    <h3 @click="router.push('/Home')">
       主页
     </h3>
   </div>
