@@ -1,0 +1,1 @@
+import{d as t,c as o,a as r,b as s,u as n,r as a,o as u}from"./index-BgFe8Y3N.js";const f=t({__name:"test",setup(p){return(l,e)=>(u(),o("div",null,[e[1]||(e[1]=r(" 测试 ")),s("h3",{onClick:e[0]||(e[0]=d=>n(a).push("/"))}," 主页 ")]))}});export{f as default};
