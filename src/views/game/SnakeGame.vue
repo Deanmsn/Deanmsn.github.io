@@ -11,12 +11,12 @@
     </div>
     <div class="game-board">
       <div
-        v-for="(row, y) in boardSize"
+        v-for="(_, y) in boardSize"
         :key="y"
         class="row"
       >
         <div
-          v-for="(col, x) in boardSize"
+          v-for="(_, x) in boardSize"
           :key="x"
           :class="getCellClass(x, y)"
           class="cell"
@@ -42,12 +42,17 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
+interface Position {
+  x: number;
+  y: number;
+}
+
 const boardSize = 20;
 const gameSpeed = ref(200); // ms
 
-const snake = ref([{ x: 10, y: 10 }]);
-const food = ref({ x: 15, y: 15 });
-const direction = ref({ x: 0, y: -1 }); // 'up'
+const snake = ref<Position[]>([{ x: 10, y: 10 }]);
+const food = ref<Position>({ x: 15, y: 15 });
+const direction = ref<Position>({ x: 0, y: -1 }); // 'up'
 const score = ref(0);
 const isGameRunning = ref(false);
 const isGameOver = ref(false);
@@ -75,7 +80,7 @@ function startGame() {
 function moveSnake() {
   if (!isGameRunning.value) return;
 
-  const head = { ...snake.value[0] };
+  const head: Position = { ...snake.value[0] };
   head.x += direction.value.x;
   head.y += direction.value.y;
 
@@ -107,7 +112,7 @@ function moveSnake() {
 }
 
 function generateFood() {
-  let newFoodPosition;
+  let newFoodPosition: Position;
   do {
     newFoodPosition = {
       x: Math.floor(Math.random() * boardSize),
