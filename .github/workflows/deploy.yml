@@ -1,0 +1,25 @@
+name: Deploy to GitHub Pages
+
+# 在main分支发生push事件时触发。
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # 使用最新的Ubuntu系统作为运行环境
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3 # 第一步：拉取代码
+
+      - name: Install and Build 🔧
+        run: |
+          npm install       # 第二步：安装依赖
+          npm run build     # 第三步：打包项目
+
+      - name: Deploy 🚀
+        uses: peaceiris/actions-gh-pages@v3 # 第四步：部署到GitHub Pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 指定打包文件的目录
