@@ -109,7 +109,7 @@
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import * as echarts from 'echarts'
-import { mockMarketData, type MarketItem, type MarketResponse } from '@/utils/mockData'
+import { mockMarketData, type MarketItem } from '@/utils/mockData'
 import { getItemDisplayName } from '@/utils/itemNames'
 import { marketApi } from '@/api/market'
 
