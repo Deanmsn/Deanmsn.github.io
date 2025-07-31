@@ -1,0 +1,1 @@
+import{d as t,c as s,e as n,a as o,u as r,f as a,b as u}from"./index-XPLLUjUn.js";const m=t({__name:"test",setup(p){return(l,e)=>(u(),s("div",null,[e[1]||(e[1]=n(" 测试 ")),o("h3",{onClick:e[0]||(e[0]=d=>r(a).push("/"))}," 主页 ")]))}});export{m as default};

@@ -28,6 +28,26 @@ const routes: Array<RouteRecordRaw> = [
         path: '/idle',
         name: 'idle',
         component: () => import('@/views/game/IdleGame.vue')
+    },
+    {
+        path: '/market',
+        name: 'market',
+        component: () => import('@/views/market/MarketPrice.vue')
+    },
+    {
+        path: '/api-test',
+        name: 'api-test',
+        component: () => import('@/views/test/ApiTest.vue')
+    },
+    {
+        path: '/chart-test',
+        name: 'chart-test',
+        component: () => import('@/views/test/ChartTest.vue')
+    },
+    {
+        path: '/market-analysis',
+        name: 'market-analysis',
+        component: () => import('@/views/market/MarketAnalysis.vue')
     }
 ]
 

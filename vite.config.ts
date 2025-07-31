@@ -11,6 +11,16 @@ export default defineConfig({
       '@': '/src'
     }
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://www.moyu-idle.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path
+      }
+    }
+  },
   build: {
     outDir: "docs"
   }
