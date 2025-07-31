@@ -39,6 +39,9 @@ export function createCorsFriendlyConfig() {
  */
 export async function tryMultipleRequests(url: string, options: any = {}) {
   const methods = [
+    // 方法0: 使用 CORS 代理
+    () => fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, { ...options }),
+
     // 方法1: 使用代理
     () => fetch(url, { ...options, mode: 'cors' }),
     
@@ -74,4 +77,4 @@ export async function tryMultipleRequests(url: string, options: any = {}) {
   }
   
   throw new Error('所有请求方法都失败了')
-} 
+}
