@@ -83,8 +83,10 @@ service.interceptors.response.use(
       errorMsg = error.message || '请求配置错误'
     }
 
-    console.error(errorMsg)
-    return Promise.reject(error)
+    // 输出详细错误信息
+    console.error('错误信息:', errorMsg)
+    console.error('错误详情:', error)
+    return Promise.reject(errorMsg)
   }
 )
 
@@ -162,4 +164,4 @@ export const request = {
 }
 
 // 导出axios实例
-export default service 
+export default service
