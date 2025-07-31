@@ -38,30 +38,24 @@ export function createCorsFriendlyConfig() {
  * 尝试多种请求方式
  */
 export async function tryMultipleRequests(url: string, options: any = {}) {
-  const methods = [
-    // 方法0: 使用 CORS 代理
-    () => fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, { ...options }),
+  // 只保留允许的安全头部
+  const safeHeaders = { ...options.headers }
+  if (safeHeaders['Content-Type']) delete safeHeaders['Content-Type']
 
-    // 方法1: 使用代理
-    () => fetch(url, { ...options, mode: 'cors' }),
-    
-    // 方法2: 不使用代理，直接请求
-    () => fetch(`https://www.moyu-idle.com${url}`, { 
-      ...options, 
-      mode: 'cors',
-      headers: {
-        ...options.headers,
-        'Origin': window.location.origin
-      }
+  // 目标完整URL
+  const fullUrl = url.startsWith('http') ? url : `https://www.moyu-idle.com${url}`
+
+  const methods = [
+    // 方法0: 使用 CORS 代理，完整URL且不带Content-Type
+    () => fetch(`https://corsproxy.io/?${encodeURIComponent(fullUrl)}`, {
+      ...options,
+      headers: safeHeaders
     }),
-    
-    // 方法3: 使用JSONP方式（如果支持）
-    () => fetch(url, { 
-      ...options, 
-      mode: 'no-cors' 
-    })
+    // 方法1: 直接请求目标
+    () => fetch(fullUrl, { ...options, mode: 'cors', headers: safeHeaders }),
+    // 方法2: no-cors
+    () => fetch(fullUrl, { ...options, mode: 'no-cors', headers: safeHeaders })
   ]
-  
   for (let i = 0; i < methods.length; i++) {
     try {
       const response = await methods[i]()
@@ -75,6 +69,5 @@ export async function tryMultipleRequests(url: string, options: any = {}) {
       }
     }
   }
-  
   throw new Error('所有请求方法都失败了')
 }
