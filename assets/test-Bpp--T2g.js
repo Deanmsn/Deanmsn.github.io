@@ -1,0 +1,1 @@
+import{d as t,c as o,e as r,a as s,f as n,r as a,o as p}from"./index-B94m1PT7.js";const f=t({__name:"test",setup(u){return(l,e)=>(p(),o("div",null,[e[1]||(e[1]=r(" 测试 ",-1)),s("h3",{onClick:e[0]||(e[0]=m=>n(a).push("/Home"))}," 主页 ")]))}});export{f as default};
