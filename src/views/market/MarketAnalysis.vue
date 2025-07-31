@@ -76,10 +76,12 @@ import { ref, onMounted } from 'vue'
 import { marketApi } from '@/api/market'
 import { mockMarketData } from '@/utils/mockData'
 import { analyzeBestBuyItems, analyzeBestSellItems } from '@/utils/marketAnalysis'
+import type { AnalysisResult } from '@/utils/marketAnalysis'
+import type { Ref } from 'vue'
 
 const loading = ref(false)
-const bestBuyItems = ref([])
-const bestSellItems = ref([])
+const bestBuyItems = ref<AnalysisResult[]>([]) as Ref<AnalysisResult[]>
+const bestSellItems = ref<AnalysisResult[]>([]) as Ref<AnalysisResult[]>
 
 const formatPrice = (price: number) => {
   return price.toLocaleString()
@@ -184,4 +186,4 @@ onMounted(() => {
 .analysis-table tr:hover {
   background: #f8f9fa;
 }
-</style> 
+</style>
