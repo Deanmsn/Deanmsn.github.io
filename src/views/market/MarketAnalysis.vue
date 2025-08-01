@@ -1,4 +1,3 @@
-
 <template>
   <div class="market-analysis">
     <div class="header">
@@ -110,12 +109,19 @@ import { mockMarketData } from '@/utils/mockData'
 import { analyzeBestBuyItems, analyzeBestSellItems } from '@/utils/marketAnalysis'
 import type { AnalysisResult } from '@/utils/marketAnalysis'
 
+type StrategyKey = 'default' | 'aggressive' | 'conservative'
+
 const loading = ref(false)
 const bestBuyItems = ref<AnalysisResult[]>([])
 const bestSellItems = ref<AnalysisResult[]>([])
 
-const selectedStrategy = ref('default')
-const analysisPresets = {
+const selectedStrategy = ref<StrategyKey>('default')
+const analysisPresets: Record<StrategyKey, {
+  label: string
+  priceWeight: number
+  volumeWeight: number
+  orderWeight: number
+}> = {
   default: {
     label: '标准权重',
     priceWeight: 0.5,

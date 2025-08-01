@@ -66,8 +66,8 @@ export function analyzeBestBuyItems(
     const sell = item.sellOrders
     if (!buy || !sell) continue
 
-    const buyPrice = buy.maxPrice
-    const sellPrice = sell.minPrice
+    const buyPrice = buy!.maxPrice
+    const sellPrice = sell!.minPrice
     const priceProfit = buyPrice - sellPrice
 
     if (priceProfit < (config.minPriceGap ?? 0)) continue
@@ -107,8 +107,8 @@ export function analyzeBestSellItems(
     const sell = item.sellOrders
     if (!sell || !buy) continue
 
-    const buyPrice = buy.maxPrice
-    const sellPrice = sell.minPrice
+    const buyPrice = buy!.maxPrice
+    const sellPrice = sell!.minPrice
     const priceProfit = sellPrice - buyPrice
 
     if (priceProfit < (config.minPriceGap ?? 0)) continue
