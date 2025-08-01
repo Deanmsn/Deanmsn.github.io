@@ -35,7 +35,6 @@ export const DEFAULT_ANALYSIS_CONFIG: AnalysisConfig = {
   weightOrders: 0.3
 }
 
-// 抽象评分函数
 function calculateScore(
     priceProfit: number,
     volume: number,
@@ -53,7 +52,6 @@ function calculateScore(
   )
 }
 
-// 分析适合买入的商品
 export function analyzeBestBuyItems(
     marketData: Record<string, MarketItem>,
     config: AnalysisConfig = DEFAULT_ANALYSIS_CONFIG,
@@ -62,12 +60,12 @@ export function analyzeBestBuyItems(
   const results: AnalysisResult[] = []
 
   for (const [itemId, item] of Object.entries(marketData)) {
+    if (!item.buyOrders || !item.sellOrders) continue
     const buy = item.buyOrders
     const sell = item.sellOrders
-    if (!buy || !sell) continue
 
-    const buyPrice = buy!.maxPrice
-    const sellPrice = sell!.minPrice
+    const buyPrice = buy.maxPrice
+    const sellPrice = sell.minPrice
     const priceProfit = buyPrice - sellPrice
 
     if (priceProfit < (config.minPriceGap ?? 0)) continue
@@ -94,7 +92,6 @@ export function analyzeBestBuyItems(
   return results.sort((a, b) => b.score - a.score).slice(0, limit)
 }
 
-// 分析适合出手的商品
 export function analyzeBestSellItems(
     marketData: Record<string, MarketItem>,
     config: AnalysisConfig = DEFAULT_ANALYSIS_CONFIG,
@@ -103,12 +100,12 @@ export function analyzeBestSellItems(
   const results: AnalysisResult[] = []
 
   for (const [itemId, item] of Object.entries(marketData)) {
+    if (!item.buyOrders || !item.sellOrders) continue
     const buy = item.buyOrders
     const sell = item.sellOrders
-    if (!sell || !buy) continue
 
-    const buyPrice = buy!.maxPrice
-    const sellPrice = sell!.minPrice
+    const buyPrice = buy.maxPrice
+    const sellPrice = sell.minPrice
     const priceProfit = sellPrice - buyPrice
 
     if (priceProfit < (config.minPriceGap ?? 0)) continue
@@ -135,8 +132,7 @@ export function analyzeBestSellItems(
   return results.sort((a, b) => b.score - a.score).slice(0, limit)
 }
 
-// 买入理由
-function generateBuyReason(buy: MarketItem['buyOrders'], profit: number): string {
+function generateBuyReason(buy: NonNullable<MarketItem['buyOrders']>, profit: number): string {
   const reasons: string[] = []
 
   if (profit > 50) reasons.push('套利空间极大')
@@ -151,8 +147,7 @@ function generateBuyReason(buy: MarketItem['buyOrders'], profit: number): string
   return reasons.join('，') || '价格合理，有一定交易量'
 }
 
-// 出售理由
-function generateSellReason(sell: MarketItem['sellOrders'], profit: number): string {
+function generateSellReason(sell: NonNullable<MarketItem['sellOrders']>, profit: number): string {
   const reasons: string[] = []
 
   if (profit > 50) reasons.push('价格远高于买单')
@@ -167,7 +162,6 @@ function generateSellReason(sell: MarketItem['sellOrders'], profit: number): str
   return reasons.join('，') || '价格合理，有一定交易量'
 }
 
-// 市场概况
 export function getMarketOverview(marketData: Record<string, MarketItem>) {
   const items = Object.values(marketData)
 
