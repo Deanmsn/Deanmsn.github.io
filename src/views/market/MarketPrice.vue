@@ -72,21 +72,84 @@
         <h3>商品详情</h3>
         <div class="table-container">
           <table>
-            <thead>
+            <thead ref="headerRef">
               <tr>
-                <th>商品名称</th>
-                <th>最低出售价</th>
-                <th>最低出售数量</th>
-                <th>总出售数量</th>
-                <th>出售订单数</th>
-                <th>最高求购价</th>
-                <th>最高求购数量</th>
-                <th>总求购数量</th>
-                <th>求购订单数</th>
+                <th :class="{sorted: sortKey === 'itemId'}" @click="handleSort('itemId')">
+                  商品名称
+                  <span v-if="sortKey === 'itemId'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'sellMinPrice'}" @click="handleSort('sellMinPrice')">
+                  最低出售价
+                  <span v-if="sortKey === 'sellMinPrice'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'sellMinPriceCount'}" @click="handleSort('sellMinPriceCount')">
+                  最低出售数量
+                  <span v-if="sortKey === 'sellMinPriceCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'sellTotalCount'}" @click="handleSort('sellTotalCount')">
+                  总出售数量
+                  <span v-if="sortKey === 'sellTotalCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'sellOrderCount'}" @click="handleSort('sellOrderCount')">
+                  出售订单数
+                  <span v-if="sortKey === 'sellOrderCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'buyMaxPrice'}" @click="handleSort('buyMaxPrice')">
+                  最高求购价
+                  <span v-if="sortKey === 'buyMaxPrice'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'buyMaxPriceCount'}" @click="handleSort('buyMaxPriceCount')">
+                  最高求购数量
+                  <span v-if="sortKey === 'buyMaxPriceCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'buyTotalCount'}" @click="handleSort('buyTotalCount')">
+                  总求购数量
+                  <span v-if="sortKey === 'buyTotalCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
+                <th :class="{sorted: sortKey === 'buyOrderCount'}" @click="handleSort('buyOrderCount')">
+                  求购订单数
+                  <span v-if="sortKey === 'buyOrderCount'">
+                    <span v-if="sortOrder === 'asc'" class="sort-arrow">▲</span>
+                    <span v-else class="sort-arrow">▼</span>
+                  </span>
+                  <span v-else class="sort-arrow sort-arrow-inactive">▲▼</span>
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, key) in filteredMarketData" :key="key">
+              <tr v-for="(item, key) in sortedMarketData" :key="key">
                 <td>{{ getItemDisplayName(item.itemId) }}</td>
                 <td>{{ formatPrice(item.sellOrders?.minPrice || 0) }}</td>
                 <td>{{ item.sellOrders?.minPriceCount || 0 }}</td>
@@ -136,6 +199,71 @@ const buyOrdersCount = computed(() => {
 
 const formatPrice = (price: number) => {
   return price.toLocaleString()
+}
+
+// 排序相关
+const sortKey = ref('')
+const sortOrder = ref<'asc' | 'desc'>('asc')
+
+const sortedMarketData = computed(() => {
+  const arr = Object.values(filteredMarketData.value)
+  if (!sortKey.value) return arr
+  return arr.slice().sort((a, b) => {
+    let aValue: any, bValue: any
+    switch (sortKey.value) {
+      case 'itemId':
+        aValue = getItemDisplayName(a.itemId)
+        bValue = getItemDisplayName(b.itemId)
+        break
+      case 'sellMinPrice':
+        aValue = a.sellOrders?.minPrice || 0
+        bValue = b.sellOrders?.minPrice || 0
+        break
+      case 'sellMinPriceCount':
+        aValue = a.sellOrders?.minPriceCount || 0
+        bValue = b.sellOrders?.minPriceCount || 0
+        break
+      case 'sellTotalCount':
+        aValue = a.sellOrders?.totalCount || 0
+        bValue = b.sellOrders?.totalCount || 0
+        break
+      case 'sellOrderCount':
+        aValue = a.sellOrders?.orderCount || 0
+        bValue = b.sellOrders?.orderCount || 0
+        break
+      case 'buyMaxPrice':
+        aValue = a.buyOrders?.maxPrice || 0
+        bValue = b.buyOrders?.maxPrice || 0
+        break
+      case 'buyMaxPriceCount':
+        aValue = a.buyOrders?.maxPriceCount || 0
+        bValue = b.buyOrders?.maxPriceCount || 0
+        break
+      case 'buyTotalCount':
+        aValue = a.buyOrders?.totalCount || 0
+        bValue = b.buyOrders?.totalCount || 0
+        break
+      case 'buyOrderCount':
+        aValue = a.buyOrders?.orderCount || 0
+        bValue = b.buyOrders?.orderCount || 0
+        break
+      default:
+        aValue = 0; bValue = 0
+    }
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortOrder.value === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue)
+    }
+    return sortOrder.value === 'asc' ? aValue - bValue : bValue - aValue
+  })
+})
+
+function handleSort(key: string) {
+  if (sortKey.value === key) {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortOrder.value = 'asc'
+  }
 }
 
 // 搜索和筛选功能
@@ -588,6 +716,20 @@ tr:hover {
   background: #f8f9fa;
 }
 
+.sort-arrow {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.sort-arrow-inactive {
+  color: #ccc;
+}
+
+.sorted {
+  color: #4ecdc4;
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .charts-container {
     grid-template-columns: 1fr;
@@ -620,4 +762,4 @@ tr:hover {
     padding: 15px;
   }
 }
-</style> 
+</style>

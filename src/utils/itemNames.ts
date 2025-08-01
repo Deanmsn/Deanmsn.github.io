@@ -16,6 +16,8 @@ export const itemNameMap: Record<string, string> = {
   "salmon": "三文鱼",
   "tuna": "金枪鱼",
   "honey": "蜂蜜",
+  "mushroomStew": "蘑菇炖汤",
+  "mysticalKoi": "神秘锦鲤",
   
   // 材料
   "herb": "草药",
@@ -34,9 +36,17 @@ export const itemNameMap: Record<string, string> = {
   "selfHealSkillBook": "自愈技能书",
   "sweepSkillBook": "横扫技能书",
   "baseGroupHealSkillBook": "基础群体治疗技能书",
-  "powerStrikeSkillBook": "强力打击技能书",
+  "powerStrikeSkillBook": "强化冲击技能书",
   "guardianLaserSkillBook": "守护者激光技能书",
-  
+  "emperorCatFinale_forAstralEmpressBossSkillBook":'星辉终极裁决技能书',
+  "prisonDominationSkillBook":'监狱统治技能书',
+  "lavaBreathSkillBook": '熔岩之息技能书',
+  "dragonRoarSkillBook":'龙吼技能书',
+  "doubleStrikeSkillBook":'双重打击技能书',
+  "forbiddenMagicSkillBook":'禁忌魔法技能书',
+  "groupCurseSkillBook":'群体诅咒技能书',
+  "ironWallSkillBook":'铁壁技能书',
+
   // 装备
   "woolCoat": "羊毛外套",
   "woolHat": "羊毛帽",
@@ -72,7 +82,11 @@ export const itemNameMap: Record<string, string> = {
   
   // 高级装备
   "guardianCoreAmulet": "守护者核心护符",
-  "dragonScaleArmor": "龙鳞护甲"
+  "dragonScaleArmor": "龙鳞护甲",
+
+  //特殊物品
+    "mysticalEssence": "神秘精华",
+  "treasureMap":"藏宝图"
 }
 
 export function getItemDisplayName(itemId: string): string {
