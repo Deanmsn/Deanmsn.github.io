@@ -141,7 +141,9 @@ const analysisPresets = {
     volumeWeight: 0.4,
     orderWeight: 0.3,
   },
-}
+} as const
+type StrategyKey = keyof typeof analysisPresets
+const selectedStrategyKey = ref<StrategyKey>('default')
 
 const formatPrice = (price: number) => price.toLocaleString()
 
