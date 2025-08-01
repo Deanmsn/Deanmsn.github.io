@@ -114,7 +114,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import * as echarts from 'echarts'
 import { marketApi } from '@/api/market'
 import { mockMarketData } from '@/utils/mockData'
-import { analyzeBestBuyItems, analyzeBestSellItems } from '@/utils/marketAnalysis'
+import {type AnalysisConfig, analyzeBestBuyItems, analyzeBestSellItems} from '@/utils/marketAnalysis'
 import type { AnalysisResult } from '@/utils/marketAnalysis'
 
 const loading = ref(false)
@@ -122,7 +122,7 @@ const bestBuyItems = ref<AnalysisResult[]>([])
 const bestSellItems = ref<AnalysisResult[]>([])
 const lastUpdateTime = ref<number>(0)
 const selectedStrategy = ref('default')
-const analysisPresets = {
+const analysisPresets:Record<StrategyKey, AnalysisConfig> = {
   default: {
     label: '标准权重',
     priceWeight: 0.5,
@@ -143,7 +143,7 @@ const analysisPresets = {
   },
 } as const
 type StrategyKey = keyof typeof analysisPresets
-const selectedStrategyKey = ref<StrategyKey>('default')
+// const selectedStrategyKey = ref<StrategyKey>('default')
 
 const formatPrice = (price: number) => price.toLocaleString()
 

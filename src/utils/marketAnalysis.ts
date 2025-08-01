@@ -18,6 +18,10 @@ export interface AnalysisResult {
 }
 
 export interface AnalysisConfig {
+  label: string
+  priceWeight?: number
+  volumeWeight?: number
+  ordersWeight?: number
   minPriceGap?: number
   minVolume?: number
   maxPrice?: number
