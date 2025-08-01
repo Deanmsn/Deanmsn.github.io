@@ -186,7 +186,7 @@ const updateECharts = () => {
 }
 
 const performAnalysis = (marketData: any) => {
-  const config = analysisPresets[selectedStrategy.value]
+  const config = analysisPresets[selectedStrategy.value as StrategyKey ]
   bestBuyItems.value = analyzeBestBuyItems(marketData, config, 10)
   bestSellItems.value = analyzeBestSellItems(marketData, config, 10)
   nextTick(updateECharts)
