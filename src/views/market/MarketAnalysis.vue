@@ -1,7 +1,9 @@
+
 <template>
   <div class="market-analysis">
     <div class="header">
       <h1>市场智能分析</h1>
+
       <button @click="refreshAnalysis" :disabled="loading">
         {{ loading ? '分析中...' : '重新分析' }}
       </button>
@@ -29,6 +31,9 @@
 
     <!-- 最适合购入 -->
     <div class="analysis-section">
+      <p v-if="lastUpdateTime"  class="update-time">
+        最后更新: {{ new Date(lastUpdateTime).toLocaleString() }}
+      </p>
       <h2>🎯 最适合购入的商品 (前10名)</h2>
       <div class="analysis-table">
         <table>
@@ -65,6 +70,9 @@
 
     <!-- 最适合出手 -->
     <div class="analysis-section">
+      <p v-if="lastUpdateTime"  class="update-time">
+        最后更新: {{ new Date(lastUpdateTime).toLocaleString() }}
+      </p>
       <h2>💰 最适合出手的商品 (前10名)</h2>
       <div class="analysis-table">
         <table>
@@ -109,19 +117,12 @@ import { mockMarketData } from '@/utils/mockData'
 import { analyzeBestBuyItems, analyzeBestSellItems } from '@/utils/marketAnalysis'
 import type { AnalysisResult } from '@/utils/marketAnalysis'
 
-type StrategyKey = 'default' | 'aggressive' | 'conservative'
-
 const loading = ref(false)
 const bestBuyItems = ref<AnalysisResult[]>([])
 const bestSellItems = ref<AnalysisResult[]>([])
-
-const selectedStrategy = ref<StrategyKey>('default')
-const analysisPresets: Record<StrategyKey, {
-  label: string
-  priceWeight: number
-  volumeWeight: number
-  orderWeight: number
-}> = {
+const lastUpdateTime = ref<number>(0)
+const selectedStrategy = ref('default')
+const analysisPresets = {
   default: {
     label: '标准权重',
     priceWeight: 0.5,
@@ -197,10 +198,12 @@ const refreshAnalysis = async () => {
     const response = await marketApi.getMarketPrice()
     if (response.code === 200 && response.data.items) {
       performAnalysis(response.data.items)
+      lastUpdateTime.value = response.data.lastUpdateTime
     }
   } catch (err) {
     console.warn('使用模拟数据进行分析')
     performAnalysis(mockMarketData)
+    lastUpdateTime.value = Date.now()
   } finally {
     loading.value = false
   }
